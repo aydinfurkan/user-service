@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+      <UserSecretsId>b5a4fa1b-2490-48ae-b15f-d9a244d9b06a</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CoreLib" Version="0.0.11" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="Google.Apis.Auth" Version="1.55.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
+    </ItemGroup>
+
+</Project>
