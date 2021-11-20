@@ -1,7 +1,7 @@
 # Base ASP.NET Core Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
-LABEL org.opencontainers.image.source="https://github.com/aydinfurkan/game-service"
+LABEL org.opencontainers.image.source="https://github.com/aydinfurkan/user-service"
 EXPOSE 5000
 
 # Build layer
