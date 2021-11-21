@@ -5,10 +5,10 @@
         <add key="MyCoreLib" value="https://nuget.pkg.github.com/aydinfurkan/index.json" />
     </packageSources>
     <packageSourceCredentials>
-        <GitLab>
+        <MyCoreLib>
             <add key="Username" value="aydinfurkan" />
             <add key="ClearTextPassword" value="NUGET_CR_PAT" />
-        </GitLab>
+        </MyCoreLib>
     </packageSourceCredentials>
 
 </configuration>
