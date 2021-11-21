@@ -9,7 +9,6 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 ARG NUGET_CR_PAT
 COPY . .
-RUN rm nuget.config
 COPY ./Nuget.Config.ci ./Nuget.Config
 RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" nuget.config
 RUN dotnet restore
