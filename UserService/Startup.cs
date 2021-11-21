@@ -56,7 +56,12 @@ namespace UserService
             services.AddSingleton<IContext, Context>(_ =>  new Context(mongoClient, _mongoSettings.MongoDbName));
             services.AddSingleton<IUserRepository, UserRepository>();
 
-            Console.WriteLine(_jwtSecretKey);
+            Console.WriteLine("Mongo BaseAddress = " + $"{_mongoSettings.BaseAddress}");
+            Console.WriteLine("Mongo MongoConnStr = " + $"{_mongoSettings.MongoConnStr}");
+            Console.WriteLine("Mongo MongoDbName = " + $"{_mongoSettings.MongoDbName}");
+            Console.WriteLine("JwtToken Audience = " + $"{_jwtTokenSettings.Audience}");
+            Console.WriteLine("JwtToken Issuer = " + $"{_jwtTokenSettings.Issuer}");
+            Console.WriteLine("JwtSecret = " + $"{_jwtSecretKey}");
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)    
                 .AddJwtBearer(options =>    
                 {    
