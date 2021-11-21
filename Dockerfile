@@ -16,7 +16,7 @@ RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
 
 ## Set Secrets
 #ARG JWTTOKEN_SECRETKEY
-#WORKDIR /UserService
+WORKDIR /UserService
 #RUN dotnet user-secrets init
 #RUN dotnet user-secrets set "JwtToken:SecretKey" "$JWTTOKEN_SECRETKEY"
 
