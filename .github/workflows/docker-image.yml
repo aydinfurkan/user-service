@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env :
-      $NUGET_CR_PAT: ${{ secrets.CR_PAT }}
+      NUGET_CR_PAT: ${{ secrets.CR_PAT }}
     steps:
       - uses: actions/checkout@v2
 
