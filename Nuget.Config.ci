@@ -7,7 +7,7 @@
     <packageSourceCredentials>
         <GitLab>
             <add key="Username" value="aydinfurkan" />
-            <add key="ClearTextPassword" value="NUGETCRPAT" />
+            <add key="ClearTextPassword" value="NUGET_CR_PAT" />
         </GitLab>
     </packageSourceCredentials>
 
