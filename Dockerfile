@@ -7,7 +7,7 @@ EXPOSE 5000
 # Build layer
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 COPY . .
-RUN dotnet restore /UserService/UserService.csproj --configfile=./NuGet.Config
+RUN nuget sources add -name "MyCoreLib" -source https://nuget.pkg.github.com/aydinfurkan/index.json -StorePasswordInClearText -username aydinfurkan -password ${{ secrets.CR_PAT }}
 WORKDIR /UserService
 RUN dotnet build UserService.csproj -c Release -o /app
 
