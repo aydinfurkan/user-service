@@ -15,10 +15,10 @@ RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" ./Nuget.Config
 RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
 
 ## Set Secrets
-ARG JWTTOKEN_SECRETKEY
-WORKDIR /UserService
-RUN dotnet user-secrets init
-RUN dotnet user-secrets set "JwtToken:SecretKey" "$JWTTOKEN_SECRETKEY"
+#ARG JWTTOKEN_SECRETKEY
+#WORKDIR /UserService
+#RUN dotnet user-secrets init
+#RUN dotnet user-secrets set "JwtToken:SecretKey" "$JWTTOKEN_SECRETKEY"
 
 ## Build
 RUN dotnet build UserService.csproj -c Release -o /app

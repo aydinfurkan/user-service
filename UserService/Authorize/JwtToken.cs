@@ -18,11 +18,11 @@ namespace UserService.Authorize
         private const string ClaimsEmail = "Email";
         private const string ClaimsUserId = "UserId";
 
-        public JwtToken(string privateKey, JwtTokenSettings jwtTokenSettings)
+        public JwtToken(JwtTokenSettings jwtTokenSettings)
         {
             _jwtTokenSettings = jwtTokenSettings;
             _algorithm = SecurityAlgorithms.HmacSha256Signature;
-            _mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(privateKey));
+            _mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtTokenSettings.SecretKey));
         }
         
         public string CreateToken(User user)

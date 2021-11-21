@@ -26,7 +26,6 @@ namespace UserService
         public IConfiguration Configuration { get; }
         private readonly UserServiceSettings _mongoSettings;
         private readonly JwtTokenSettings _jwtTokenSettings;
-        private readonly string _jwtSecretKey;
         
         public Startup(IWebHostEnvironment env)
         {
@@ -39,7 +38,7 @@ namespace UserService
             Configuration = builder.Build();
             _mongoSettings = Configuration.GetSection("MongoSettings").Get<UserServiceSettings>();
             _jwtTokenSettings = Configuration.GetSection("JwtToken").Get<JwtTokenSettings>();
-            _jwtSecretKey = Configuration["JwtToken:SecretKey"];
+            //_jwtSecretKey = Configuration["JwtToken:SecretKey"];
             //_googleSecretsSettings = Configuration.GetSection("Google:Secrets").Get<GoogleSecretSettings>();
         }
         
@@ -50,18 +49,12 @@ namespace UserService
             services.AddTransient(typeof(ILogger<>), typeof(Logger<>));
             services.AddTSwaggerGen("User Service", "User service for Piksel");
             
-            services.AddSingleton<IToken, JwtToken>(_ => new JwtToken(_jwtSecretKey, _jwtTokenSettings));
+            services.AddSingleton<IToken, JwtToken>(_ => new JwtToken(_jwtTokenSettings));
             services.AddSingleton<IUserService, Services.UserService>();
             var mongoClient = new MongoClient(_mongoSettings.MongoConnStr);
             services.AddSingleton<IContext, Context>(_ =>  new Context(mongoClient, _mongoSettings.MongoDbName));
             services.AddSingleton<IUserRepository, UserRepository>();
 
-            Console.WriteLine("Mongo BaseAddress = " + $"{_mongoSettings.BaseAddress}");
-            Console.WriteLine("Mongo MongoConnStr = " + $"{_mongoSettings.MongoConnStr}");
-            Console.WriteLine("Mongo MongoDbName = " + $"{_mongoSettings.MongoDbName}");
-            Console.WriteLine("JwtToken Audience = " + $"{_jwtTokenSettings.Audience}");
-            Console.WriteLine("JwtToken Issuer = " + $"{_jwtTokenSettings.Issuer}");
-            Console.WriteLine("JwtSecret = " + $"{_jwtSecretKey}");
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)    
                 .AddJwtBearer(options =>    
                 {    
@@ -74,7 +67,7 @@ namespace UserService
                         ValidateIssuerSigningKey = true,    
                         ValidIssuer = _jwtTokenSettings.Issuer,    
                         ValidAudience = _jwtTokenSettings.Audience,    
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey))    
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtTokenSettings.SecretKey))    
                     };    
                 });    
             
