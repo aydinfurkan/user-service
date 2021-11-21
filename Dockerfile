@@ -7,7 +7,7 @@ EXPOSE 5000
 # Build layer
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 COPY . .
-RUN dotnet restore /UserService/UserService.csproj --configfile=./NuGet.Config
+RUN dotnet restore /UserService/UserService.csproj --configfile=/NuGet.Config
 WORKDIR /UserService
 RUN dotnet build UserService.csproj -c Release -o /app
 
