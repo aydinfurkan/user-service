@@ -7,14 +7,21 @@ EXPOSE 5000
 # Build layer
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
+## Set Nuget Config
 ARG NUGET_CR_PAT
 COPY . .
 COPY ./Nuget.Config.ci ./Nuget.Config
 RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" ./Nuget.Config
 RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
 
+## Build
 WORKDIR /UserService
 RUN dotnet build UserService.csproj -c Release -o /app
+
+## Set Secrets
+ARG JWTTOKEN_SECRETKEY
+RUN dotnet user-secrets init
+RUN dotnet user-secrets set "JwtToken:SecretKey" $JWTTOKEN_SECRETKEY
 
 # Publish dll
 FROM build AS publish

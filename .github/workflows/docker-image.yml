@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env :
       NUGET_CR_PAT: ${{ secrets.CR_PAT }}
+      JWTTOKEN_SECRETKEY: ${{ secrets.JWTTOKEN_SECRETKEY }}
     steps:
       - uses: actions/checkout@v2
 
@@ -23,7 +24,7 @@ jobs:
 
       - name: docker build
         run: |
-          docker build --tag $IMAGE_URL --build-arg NUGET_CR_PAT=$NUGET_CR_PAT .
+          docker build --tag $IMAGE_URL --build-arg NUGET_CR_PAT=$NUGET_CR_PAT --build-arg JWTTOKEN_SECRETKEY=$JWTTOKEN_SECRETKEY .
 
       - name: docker push
         run: |
