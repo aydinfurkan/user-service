@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 ARG NUGET_CR_PAT
 COPY . .
 COPY ./Nuget.Config.ci ./Nuget.Config
-RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" Nuget.Config
+RUN sed -i -e "s/NUGETCRPAT/$NUGET_CR_PAT/g" ./Nuget.Config
 RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
 
 WORKDIR /UserService
