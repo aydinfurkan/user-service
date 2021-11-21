@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using CoreLib.Middlewares.Error;
 using CoreLib.Middlewares.Logging;
@@ -54,7 +55,8 @@ namespace UserService
             var mongoClient = new MongoClient(_mongoSettings.MongoConnStr);
             services.AddSingleton<IContext, Context>(_ =>  new Context(mongoClient, _mongoSettings.MongoDbName));
             services.AddSingleton<IUserRepository, UserRepository>();
-            
+
+            Console.WriteLine(_jwtSecretKey);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)    
                 .AddJwtBearer(options =>    
                 {    
