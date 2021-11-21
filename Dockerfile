@@ -11,7 +11,7 @@ ARG NUGET_CR_PAT
 COPY . .
 COPY ./Nuget.Config.ci ./Nuget.Config
 RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" Nuget.Config
-RUN dotnet restore
+RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
 
 WORKDIR /UserService
 RUN dotnet build UserService.csproj -c Release -o /app
