@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <packageSources>
+        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+        <add key="MyCoreLib" value="https://nuget.pkg.github.com/aydinfurkan/index.json" />
+    </packageSources>
+    <packageSourceCredentials>
+        <GitLab>
+            <add key="Username" value="aydinfurkan" />
+            <add key="ClearTextPassword" value="NUGET_CR_PAT" />
+        </GitLab>
+    </packageSourceCredentials>
+
+</configuration>

@@ -6,8 +6,14 @@ EXPOSE 5000
 
 # Build layer
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+
+ARG NUGET_CR_PAT
 COPY . .
-RUN nuget sources add -name "MyCoreLib" -source https://nuget.pkg.github.com/aydinfurkan/index.json -StorePasswordInClearText -username aydinfurkan -password ${{ secrets.CR_PAT }}
+RUN rm nuget.config
+COPY ./Nuget.Config.ci ./Nuget.Config
+RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" nuget.config
+RUN dotnet restore
+
 WORKDIR /UserService
 RUN dotnet build UserService.csproj -c Release -o /app
 

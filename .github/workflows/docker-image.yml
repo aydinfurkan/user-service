@@ -12,6 +12,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env :
+      $NUGET_CR_PAT: ${{ secrets.CR_PAT }}
     steps:
       - uses: actions/checkout@v2
 
@@ -21,7 +23,7 @@ jobs:
 
       - name: docker build
         run: |
-          docker build . --tag $IMAGE_URL
+          docker build . --tag $IMAGE_URL --build-arg NUGET_CR_PAT=$NUGET_CR_PAT
 
       - name: docker push
         run: |
