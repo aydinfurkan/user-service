@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UserService.ViewModels.ResponseModels
+namespace UserService.Controllers.ViewModels.ResponseModels
 {
     public class DeleteUserResponseModel
     {

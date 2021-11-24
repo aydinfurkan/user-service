@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace UserService.Authorize
+namespace UserService.Helpers.Authorize
 {
-    public class UserTokenClaims
+    public class PTokenClaims
     {
         public Guid Jti { get; set; }
         public Guid UserId { get; set; }
         public string Email { get; set; }
         
         
-        public UserTokenClaims(Guid jti, Guid userId, string email)
+        public PTokenClaims(Guid jti, Guid userId, string email)
         {
             Jti = jti;
             UserId = userId;

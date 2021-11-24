@@ -2,7 +2,7 @@
 using System.Linq;
 using UserService.Domains;
 
-namespace UserService.ViewModels.ResponseModels
+namespace UserService.Controllers.ViewModels.ResponseModels
 {
     public class UserResponseModel
     {

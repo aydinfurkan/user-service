@@ -14,6 +14,7 @@ namespace UserService.Repositories
         public Task<Tuple<List<User>, long>> GetUsers(Expression<Func<User, bool>> expression, int from, int size, SortDefinition<User> sortDefinition);
         public Task<Guid> CreateUser(User user);
         public Task<User> ReplaceUser(User user);
+        public Task<User> UpdateUser(User user, (Expression<Func<User, object>>, object) updatedProperties);
         public Task<bool> HardDeleteUser(Guid id);
         public Task<bool> DeleteUser(Guid id);
     }

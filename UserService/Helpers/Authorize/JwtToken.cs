@@ -3,12 +3,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using CoreLib.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using UserService.Configs;
 using UserService.Domains;
 using UserService.Exceptions;
 
-namespace UserService.Authorize
+namespace UserService.Helpers.Authorize
 {
     public class JwtToken : IToken
     {
@@ -57,7 +58,7 @@ namespace UserService.Authorize
             }
         }
         
-        public UserTokenClaims GetClaims(ClaimsPrincipal claimsPrincipal)
+        public PTokenClaims GetClaims(ClaimsPrincipal claimsPrincipal)
         {
             var jtiOk = Guid.TryParse(claimsPrincipal.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value, out var jti);
             var idOk = Guid.TryParse(claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimsUserId)?.Value, out var id);
@@ -68,7 +69,36 @@ namespace UserService.Authorize
                 throw new UserServerError($"Jwt Token GetClaims Parse Guid Error.");
             }
 
-            return new UserTokenClaims(jti, id, email);
+            return new PTokenClaims(jti, id, email);
+        }
+        public PTokenClaims ParseToken(string pToken)
+        {
+            var validationParameters = new TokenValidationParameters()
+            {
+                ValidAudience = _jwtTokenSettings.Audience,
+                ValidIssuer = _jwtTokenSettings.Issuer,
+                ValidateLifetime = true,
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtTokenSettings.SecretKey))
+            };
+            
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            SecurityToken validatedPToken = null;
+            ClaimsPrincipal claimsPrincipal = null;
+            try
+            {
+                claimsPrincipal = tokenHandler.ValidateToken(pToken, validationParameters, out validatedPToken);
+            }
+            catch
+            {
+               throw new UserBadRequest(pToken);
+            }
+
+            return GetClaims(claimsPrincipal);
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Domains;
 using UserService.Exceptions;
 using UserService.Repositories;
@@ -38,12 +39,29 @@ namespace UserService.Services
             return await _repository.CreateUser(user);
         }
 
+        public async Task<Character> CreateCharacter(Guid userId, CreateCharacterRequestModel createCharacterRequestModel)
+        {
+            var user = await GetUserById(userId);
+            var newCharacter = new Character(createCharacterRequestModel.CharacterName);
+            user.AddCharacter(newCharacter);
+            await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
+            return newCharacter;
+        }
+
         public async Task<User> ReplaceUser(User user)
         {
             var replacedUser = await _repository.ReplaceUser(user);
             if (replacedUser == null)
                 throw new UserNotFound(user.Id.ToString());
             return replacedUser;
+        }
+
+        public async Task<bool> DeleteCharacter(Guid userId, Guid characterId)
+        {
+            var user = await GetUserById(userId);
+            user.DeleteCharacter(characterId);
+            await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
+            return true;
         }
 
         public async Task<bool> DeleteUser(Guid id)

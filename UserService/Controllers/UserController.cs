@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Google.Apis.Auth;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using UserService.Authorize;
+using UserService.Controllers.ViewModels.RequestModels;
+using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
+using UserService.Helpers.Authorize;
 using UserService.Services;
-using UserService.ViewModels.GooglePayload;
-using UserService.ViewModels.RequestModels;
-using UserService.ViewModels.ResponseModels;
 
 namespace UserService.Controllers
 {
     [ApiController]
-    [Authorize]
-    [Route("[controller]")]
+    [Route("/user")]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -32,80 +27,77 @@ namespace UserService.Controllers
         }
         
         /// <summary>
-        /// Check if the id is invalid
+        /// Get a single user by p_token in cookie
         /// </summary>
-        /// <returns>Whether the given id is valid or not.</returns>
-        /// <response code="200">Id is valid.</response>
-        /// <response code="404">Id is not valid.</response>
-        /// <response code="500">Internal server error.</response>
-        [HttpGet("authorize")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Authorize([FromQuery] string googleIdToken) // Google token
-        {
-            var googleUser =  await GoogleJsonWebSignature.ValidateAsync(googleIdToken);
-            
-            var user = await _service.GetUserByEmail(googleUser.Email);
-            if (user == null)
-                throw new UserNotFound(googleUser.Email);
-
-            var token = _token.CreateToken(user);
-            return Ok(token);
-        }
-        
-        
-        /// <summary>
-        /// Create User
-        /// </summary>
-        /// <param name="createUserRequestModel">Google Id Token to be created</param>
-        /// <returns>The created user's id.</returns>
-        /// <response code="201">Returns created user's id.</response>
-        /// <response code="400">The model is not valid.</response>
-        /// <response code="500">Internal server error.</response>
-        [HttpPost("create")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(CreateUserResponseModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [AllowAnonymous]
-        public async Task<IActionResult> Create([FromBody] CreateUserRequestModel createUserRequestModel)  // Google token
-        {
-            var googleUser =  await GoogleJsonWebSignature.ValidateAsync(createUserRequestModel.GoogleIdToken);
-            
-            var newUser = googleUser.ToModel();
-            var userId = await _service.CreateUser(newUser);
-            
-            var token = _token.CreateToken(newUser);
-            
-            var createdAtPath = $"/verify";
-            return Created(createdAtPath, new CreateUserResponseModel(token, true));
-        }
-
-        /// <summary>
-        /// Get a single user by id
-        /// </summary>
-        /// <param name="id">Id of user</param>
-        /// <returns>A user with the given id.</returns>
-        /// <response code="200">Returns user with the given id.</response>
-        /// <response code="400">The id is not valid.</response>
+        /// <returns>A user model.</returns>
+        /// <response code="200">Returns user model.</response>
+        /// <response code="401">The p_token is not valid.</response>
         /// <response code="404">User not found.</response>
         /// <response code="500">Internal server error.</response>
-        [HttpGet("verify")]
+        [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Verify()
+        public async Task<IActionResult> Get()
         {
-            var userTokenClaims = _token.GetClaims(HttpContext.User);
+            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
 
-            var user = await _service.GetUserByEmail(userTokenClaims.Email);
+            var user = await _service.GetUserById(pTokenClaims.UserId);
             if (user == null)
-                throw new UserNotFound(userTokenClaims.UserId.ToString());
+                throw new UserNotFound(pTokenClaims.UserId.ToString());
             
             return Ok(new UserResponseModel(user));
         }
         
+        /// <summary>
+        /// Get a single user by id
+        /// </summary>
+        /// <param name="createCharacterRequestModel">Character to be created</param>
+        /// <returns>A user with the given id.</returns>
+        /// <response code="200">Returns user with the given id.</response>
+        /// <response code="400">The id is not valid.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Internal server error.</response>
+        [HttpPost("character")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequestModel createCharacterRequestModel)
+        {
+            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+
+            var character = await _service.CreateCharacter(pTokenClaims.UserId, createCharacterRequestModel);
+            if (character == null)
+                throw new UserNotFound(pTokenClaims.UserId.ToString());
+            
+            return Ok(new CreateCharacterResponseModel(character.CharacterId, true));
+        }
+        
+        /// <summary>
+        /// Delete user
+        /// </summary>
+        /// <param name="deleteCharacterRequestModel">The Character Id of the character to delete.</param>
+        /// <returns>Deleted user's id.</returns>
+        /// <response code="200">Returns deleted user's id.</response>
+        /// <response code="400">The id was invalid.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Internal server error.</response>
+        [HttpDelete("character")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(DeleteUserResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCharacter([FromBody] DeleteCharacterRequestModel deleteCharacterRequestModel)
+        {
+            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var success = await _service.DeleteCharacter(pTokenClaims.UserId, deleteCharacterRequestModel.CharacterId);
+            return Ok(new DeleteCharacterResponseModel(deleteCharacterRequestModel.CharacterId, success));
+        }
 
         /// <summary>
         /// Delete user
@@ -124,41 +116,14 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete()
         {
-            var userTokenClaims = _token.GetClaims(HttpContext.User);
-            var id = userTokenClaims.UserId;
+            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var id = pTokenClaims.UserId;
             
             var result = await _service.DeleteUser(id);
             if(!result)
                 throw new UserNotFound(id.ToString());
             return Ok(new DeleteUserResponseModel(id, true));
 
-        }
-        
-        /// <summary>
-        /// Hard delete user
-        /// </summary>
-        /// <param name="id">The id of the user to delete.</param>
-        /// <returns>Deleted user's id.</returns>
-        /// <response code="200">Returns deleted user's id.</response>
-        /// <response code="400">The id was invalid.</response>
-        /// <response code="404">User not found.</response>
-        /// <response code="500">Internal server error.</response>
-        [HttpDelete("hard")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(DeleteUserResponseModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> HardDelete()
-        {
-            var userTokenClaims = _token.GetClaims(HttpContext.User);
-            var id = userTokenClaims.UserId;
-            
-            var result = await _service.HardDeleteUser(id);
-            if(!result)
-                throw new UserNotFound(id.ToString());
-            return Ok(new DeleteUserResponseModel(id, true));
         }
 
     }

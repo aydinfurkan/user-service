@@ -1,9 +1,9 @@
 ﻿using UserService.Domains;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 
-namespace UserService.ViewModels.GooglePayload
+namespace UserService.Helpers.Extensions
 {
-    public static class PayloadExtension
+    public static class GooglePayloadExtension
     {
         public static User ToModel(this Payload payload)
         {

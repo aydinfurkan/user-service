@@ -45,14 +45,16 @@ namespace UserService.Repositories
 
             throw new UserNotFound(user.Id.ToString());
         }
-
-        public async Task<bool> HardDeleteUser(Guid id)
+        public async Task<User> UpdateUser(User user, (Expression<Func<User, object>>, object) updatedProperties)
         {
-            var result = await DeleteOneAsync(c => c.Id.Equals(id));
+            var result = await UpdateOneAsync(c => c.Id == user.Id  && !c.IsDeleted, updatedProperties);
             
-            return result > 0;
+            if (result > 0)
+                return user;
+
+            throw new UserNotFound(user.Id.ToString());
         }
-        
+
         public async Task<bool> DeleteUser(Guid id)
         {
             var result = await UpdateOneAsync(c => c.Id.Equals(id),
@@ -60,6 +62,13 @@ namespace UserService.Repositories
             
             return result > 0;
         }
-
+        
+        public async Task<bool> HardDeleteUser(Guid id)
+        {
+            var result = await DeleteOneAsync(c => c.Id.Equals(id));
+            
+            return result > 0;
+        }
+        
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace UserService.ViewModels.RequestModels
+﻿namespace UserService.Controllers.ViewModels.RequestModels
 {
     public class CreateUserRequestModel
     {

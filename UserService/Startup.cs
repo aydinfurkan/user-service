@@ -14,8 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
-using UserService.Authorize;
 using UserService.Configs;
+using UserService.Helpers.Authorize;
 using UserService.Repositories;
 using UserService.Services;
 
