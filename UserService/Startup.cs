@@ -76,7 +76,7 @@ namespace UserService
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "http://localhost");
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
                         //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "http://www.pkhood.com");
                         //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "https://www.pkhood.com");
                         builder.AllowAnyHeader()
