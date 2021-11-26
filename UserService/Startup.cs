@@ -69,7 +69,20 @@ namespace UserService
                         ValidAudience = _jwtTokenSettings.Audience,    
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtTokenSettings.SecretKey))    
                     };    
-                });    
+                });
+            
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "www.pkhood.com");
+                        builder.AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
             
             services.AddControllers();
         }
@@ -89,7 +102,7 @@ namespace UserService
 
             app.UseRouting();
             
-            app.UseCors(options => options.AllowAnyOrigin());
+            app.UseCors();
             
             app.UseAuthentication();
 
