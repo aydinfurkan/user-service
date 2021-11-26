@@ -49,7 +49,7 @@ namespace UserService.Controllers
                 throw new UserNotFound(googleUser.Email);
             
             var token = _token.CreateToken(user);
-            Response.AddCookie("p_token", token);
+            Response.AddCookie(PTokenHelper.PTokenKey, token);
             return Ok(new AuthorizeUserResponseModel(token, true));
         }
         

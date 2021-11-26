@@ -81,7 +81,8 @@ namespace UserService
                         //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "https://www.pkhood.com");
                         builder.AllowAnyHeader()
                             .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowCredentials()
+                            .WithExposedHeaders("*");
                     });
             });
             
