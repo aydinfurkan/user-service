@@ -42,7 +42,7 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Authorize([FromQuery] string googleIdToken)
         {
-            var googleUser =  await GoogleJsonWebSignature.ValidateAsync(googleIdToken);
+            var googleUser =  await GoogleJsonWebSignature.ValidateAsync(googleIdToken); // Burdan 500 donuyo her turlu
             
             var user = await _service.GetUserByEmail(googleUser.Email);
             if (user == null)

@@ -89,6 +89,8 @@ namespace UserService
 
             app.UseRouting();
             
+            app.UseCors(options => options.AllowAnyOrigin());
+            
             app.UseAuthentication();
 
             app.UseAuthorization();
