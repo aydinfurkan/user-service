@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,7 @@ namespace UserService.Controllers
 {
     [ApiController]
     [Route("/user")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -42,8 +44,9 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
-            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
-
+            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var pTokenClaims = _token.GetClaims(HttpContext.User);
+            
             var user = await _service.GetUserById(pTokenClaims.UserId);
             if (user == null)
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
@@ -68,8 +71,9 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequestModel createCharacterRequestModel)
         {
-            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
-
+            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var pTokenClaims = _token.GetClaims(HttpContext.User);
+            
             var character = await _service.CreateCharacter(pTokenClaims.UserId, createCharacterRequestModel);
             if (character == null)
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
@@ -94,7 +98,9 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteCharacter([FromBody] DeleteCharacterRequestModel deleteCharacterRequestModel)
         {
-            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var pTokenClaims = _token.GetClaims(HttpContext.User);
+            
             var success = await _service.DeleteCharacter(pTokenClaims.UserId, deleteCharacterRequestModel.CharacterId);
             return Ok(new DeleteCharacterResponseModel(deleteCharacterRequestModel.CharacterId, success));
         }
@@ -116,7 +122,9 @@ namespace UserService.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete()
         {
-            var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var pTokenClaims = _token.GetClaims(HttpContext.User);
+            
             var id = pTokenClaims.UserId;
             
             var result = await _service.DeleteUser(id);
