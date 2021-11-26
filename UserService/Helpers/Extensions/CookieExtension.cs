@@ -8,7 +8,8 @@ namespace UserService.Helpers.Extensions
         {
             var option = new CookieOptions
             {
-                SameSite = SameSiteMode.None
+                SameSite = SameSiteMode.None,
+                Secure = true
             };
 
 
