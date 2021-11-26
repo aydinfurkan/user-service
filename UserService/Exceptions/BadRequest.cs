@@ -4,6 +4,6 @@ namespace UserService.Exceptions
 {
     public class UserBadRequest : BadRequest
     {
-        public UserBadRequest(string request) : base(400, $"{request} is not a valid request") { }
+        public UserBadRequest(string request) : base(400, request) { }
     }
 }
