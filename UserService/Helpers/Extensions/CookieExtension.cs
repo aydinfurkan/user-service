@@ -6,7 +6,11 @@ namespace UserService.Helpers.Extensions
     {
         public static void AddCookie(this HttpResponse response, string key, string value, int? expireTime = null)
         {
-            var option = new CookieOptions();  
+            var option = new CookieOptions
+            {
+                SameSite = SameSiteMode.None
+            };
+
 
             // if (expireTime.HasValue)  
             //     option.Expires = DateTime.Now.AddMinutes(expireTime.Value);  
@@ -14,6 +18,7 @@ namespace UserService.Helpers.Extensions
             //     option.Expires = DateTime.Now.AddMilliseconds(10);  
    
             response.Cookies.Append(key, value, option);
+            
         }
     }
 }
