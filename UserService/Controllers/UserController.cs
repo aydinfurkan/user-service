@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
@@ -50,6 +51,11 @@ namespace UserService.Controllers
             var user = await _service.GetUserById(pTokenClaims.UserId);
             if (user == null)
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
+
+            if (user.CharacterList.IsNullOrEmpty()) // TODO karakter islemleri yapildiginda burayi sil
+            {
+                await CreateCharacter(new CreateCharacterRequestModel{CharacterName = "Character01"});
+            }
             
             return Ok(new UserResponseModel(user));
         }
