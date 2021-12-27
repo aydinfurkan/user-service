@@ -52,11 +52,6 @@ namespace UserService.Controllers
             if (user == null)
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
 
-            if (user.CharacterList.IsNullOrEmpty()) // TODO karakter islemleri yapildiginda burayi sil
-            {
-                await CreateCharacter(new CreateCharacterRequestModel{CharacterName = "Character01"});
-            }
-            
             return Ok(new UserResponseModel(user));
         }
         
