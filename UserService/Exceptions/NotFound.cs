@@ -5,7 +5,7 @@ namespace UserService.Exceptions
 {
     public class UserNotFound : NotFound
     {
-        public UserNotFound(string email) : base(404, $"User not found with email: {email}") { }
+        public UserNotFound(string userId) : base(404, $"User not found with id: {userId}") { }
     }
     public class CharacterNotFound : NotFound
     {

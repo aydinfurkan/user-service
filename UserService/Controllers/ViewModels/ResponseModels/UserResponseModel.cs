@@ -19,7 +19,8 @@ namespace UserService.Controllers.ViewModels.ResponseModels
             CharacterList = user.CharacterList.Select(x => new Character
             {
                 CharacterId = x.CharacterId.ToString(),
-                CharacterName = x.CharacterName
+                CharacterName = x.CharacterName,
+                CharacterClass = x.CharacterClass
             }).ToList();
         }
     }
@@ -28,5 +29,6 @@ namespace UserService.Controllers.ViewModels.ResponseModels
     {
         public string CharacterId { get; set; }
         public string CharacterName { get; set; }
+        public string CharacterClass { get; set; }
     }
 }

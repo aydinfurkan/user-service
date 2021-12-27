@@ -5,6 +5,7 @@ using CoreLib.Middlewares.Logging;
 using CoreLib.Mongo.Context;
 using CoreLib.Swagger;
 using CoreLib.Validations;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -54,7 +55,7 @@ namespace UserService
             var mongoClient = new MongoClient(_mongoSettings.MongoConnStr);
             services.AddSingleton<IContext, Context>(_ =>  new Context(mongoClient, _mongoSettings.MongoDbName));
             services.AddSingleton<IUserRepository, UserRepository>();
-
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)    
                 .AddJwtBearer(options =>    
                 {    
@@ -88,6 +89,7 @@ namespace UserService
             });
             
             services.AddControllers();
+            services.AddMvc().AddFluentValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -39,10 +39,10 @@ namespace UserService.Services
             return await _repository.CreateUser(user);
         }
 
-        public async Task<Character> CreateCharacter(Guid userId, CreateCharacterRequestModel createCharacterRequestModel)
+        public async Task<Character> CreateCharacter(Guid userId, CreateCharacterRequestModel requestModel)
         {
             var user = await GetUserById(userId);
-            var newCharacter = new Character(createCharacterRequestModel.CharacterName);
+            var newCharacter = new Character(requestModel.CharacterName, requestModel.CharacterClass.ToLower());
             user.AddCharacter(newCharacter);
             await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
             return newCharacter;
