@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UserService.Domains;
 
@@ -6,6 +7,7 @@ namespace UserService.Controllers.ViewModels.ResponseModels
 {
     public class UserResponseModel
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
@@ -13,6 +15,7 @@ namespace UserService.Controllers.ViewModels.ResponseModels
 
         public UserResponseModel(User user)
         {
+            Id = (Guid) user.Id;
             Name = user.Name;
             Surname = user.Surname;
             Email = user.Email;
