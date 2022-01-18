@@ -15,7 +15,7 @@ namespace UserService.Domains
         [BsonElement("position")] 
         public Position Position { get; set; }
         [BsonElement("health")] 
-        public int Health { get; set; }
+        public decimal Health { get; set; }
 
         public Character(string characterName, string characterClass)
         {

@@ -6,6 +6,6 @@ namespace UserService.Controllers.ViewModels.Common
         public string Name { get; set; }
         public string Class { get; set; }
         public Position Position { get; set; }
-        public int Health { get; set; }
+        public decimal Health { get; set; }
     }
 }
