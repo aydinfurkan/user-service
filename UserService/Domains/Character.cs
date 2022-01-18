@@ -22,7 +22,7 @@ namespace UserService.Domains
             Id = Guid.NewGuid();
             Name = characterName;
             Class = characterClass;
-            Position = new Position(0, 0, 0);
+            Position = new Position(0, 10, 0);
             Health = 1000;
         }
     }
