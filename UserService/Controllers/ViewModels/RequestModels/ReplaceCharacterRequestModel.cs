@@ -8,7 +8,7 @@ namespace UserService.Controllers.ViewModels.RequestModels
     {
         public Guid CharacterId { get; set; }
         public Position Position { get; set; }
-        public int Health { get; set; }
+        public decimal Health { get; set; }
     }
     public class ReplaceCharacterRequestModelValidator : AbstractValidator<ReplaceCharacterRequestModel>
     {

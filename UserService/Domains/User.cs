@@ -35,7 +35,7 @@ namespace UserService.Domains
             if (CharacterList.Count >= 5) throw new CharacterConflict();
             CharacterList.Add(character);
         }
-        public Character UpdateCharacter(Guid characterId, Position position, int health)
+        public Character UpdateCharacter(Guid characterId, Position position, decimal health)
         {
             var character = CharacterList.FirstOrDefault(x => x.Id == characterId);
             if (character == null) throw new CharacterNotFound(characterId);
