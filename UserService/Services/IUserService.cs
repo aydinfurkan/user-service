@@ -11,6 +11,7 @@ namespace UserService.Services
         public Task<User> GetUserByEmail(string email);
         public Task<Guid> CreateUser(User user);
         public Task<Character> CreateCharacter(Guid userId, CreateCharacterRequestModel createCharacterRequestModel);
+        public Task<Character> ReplaceCharacter(Guid userId, ReplaceCharacterRequestModel createCharacterRequestModel);
         public Task<User> ReplaceUser(User user);
         public Task<bool> DeleteCharacter(Guid userId, Guid characterId);
         public Task<bool> DeleteUser(Guid id);

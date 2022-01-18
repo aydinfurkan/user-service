@@ -48,6 +48,14 @@ namespace UserService.Services
             return newCharacter;
         }
 
+        public async Task<Character> ReplaceCharacter(Guid userId, ReplaceCharacterRequestModel requestModel)
+        {
+            var user = await GetUserById(userId);
+            var changedCharacter = user.UpdateCharacter(requestModel.CharacterId, requestModel.Position.ToModel(), requestModel.Health);
+            await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
+            return changedCharacter;
+        }
+
         public async Task<User> ReplaceUser(User user)
         {
             var replacedUser = await _repository.ReplaceUser(user);

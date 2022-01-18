@@ -56,13 +56,13 @@ namespace UserService.Controllers
         }
         
         /// <summary>
-        /// Get a single user by id
+        /// Create a character
         /// </summary>
         /// <param name="createCharacterRequestModel">Character to be created</param>
-        /// <returns>A user with the given id.</returns>
-        /// <response code="200">Returns user with the given id.</response>
+        /// <returns>Created character id.</returns>
+        /// <response code="200">Returns created character id.</response>
         /// <response code="400">The id is not valid.</response>
-        /// <response code="404">User not found.</response>
+        /// <response code="404">Character not found.</response>
         /// <response code="500">Internal server error.</response>
         [HttpPost("character")]
         [Produces("application/json")]
@@ -79,17 +79,44 @@ namespace UserService.Controllers
             if (character == null)
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
             
-            return Ok(new CreateCharacterResponseModel(character.CharacterId, true));
+            return Ok(new CreateCharacterResponseModel(character.Id, true));
         }
         
         /// <summary>
-        /// Delete user
+        /// Get a single user by id
+        /// </summary>
+        /// <param name="replaceCharacterRequestModel">Character to be created</param>
+        /// <returns>A user with the given id.</returns>
+        /// <response code="200">Returns user with the given id.</response>
+        /// <response code="400">The id is not valid.</response>
+        /// <response code="404">User not found.</response>
+        /// <response code="500">Internal server error.</response>
+        [HttpPut("character")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ReplaceCharacter([FromBody] ReplaceCharacterRequestModel replaceCharacterRequestModel)
+        {
+            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
+            var pTokenClaims = _token.GetClaims(HttpContext.User);
+            
+            var character = await _service.ReplaceCharacter(pTokenClaims.UserId, replaceCharacterRequestModel);
+            if (character == null)
+                throw new UserNotFound(pTokenClaims.UserId.ToString());
+            
+            return Ok(new ReplaceCharacterResponseModel(character.Id, true));
+        }
+        
+        /// <summary>
+        /// Delete character
         /// </summary>
         /// <param name="deleteCharacterRequestModel">The Character Id of the character to delete.</param>
-        /// <returns>Deleted user's id.</returns>
-        /// <response code="200">Returns deleted user's id.</response>
+        /// <returns>Deleted character's id.</returns>
+        /// <response code="200">Returns deleted character's id.</response>
         /// <response code="400">The id was invalid.</response>
-        /// <response code="404">User not found.</response>
+        /// <response code="404">Character not found.</response>
         /// <response code="500">Internal server error.</response>
         [HttpDelete("character")]
         [Produces("application/json")]

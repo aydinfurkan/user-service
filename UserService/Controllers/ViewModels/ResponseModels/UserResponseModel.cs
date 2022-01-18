@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UserService.Controllers.ViewModels.Common;
 using UserService.Domains;
+using Character = UserService.Controllers.ViewModels.Common.Character;
 
 namespace UserService.Controllers.ViewModels.ResponseModels
 {
@@ -21,17 +23,17 @@ namespace UserService.Controllers.ViewModels.ResponseModels
             Email = user.Email;
             CharacterList = user.CharacterList.Select(x => new Character
             {
-                CharacterId = x.CharacterId.ToString(),
-                CharacterName = x.CharacterName,
-                CharacterClass = x.CharacterClass
+                Id = x.Id.ToString(),
+                Name = x.Name,
+                Class = x.Class,
+                Position = new Position
+                {
+                    X = x.Position.X, 
+                    Y = x.Position.Y, 
+                    Z = x.Position.Z
+                },
+                Health = x.Health
             }).ToList();
         }
-    }
-
-    public class Character
-    {
-        public string CharacterId { get; set; }
-        public string CharacterName { get; set; }
-        public string CharacterClass { get; set; }
     }
 }
