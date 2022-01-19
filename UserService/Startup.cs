@@ -81,7 +81,7 @@ namespace UserService
                         //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "http://www.pkhood.com");
                         builder
                             //.WithOrigins("localhost","http://www.pkhood.com")
-                            .SetIsOriginAllowed(origin => new Uri(origin).Host is "localhost" or "pkhood.com")
+                            .SetIsOriginAllowed(origin => new Uri(origin).Host is "localhost" or "pkhood.com" or "www.pkhood.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
