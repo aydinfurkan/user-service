@@ -35,12 +35,18 @@ namespace UserService.Domains
             if (CharacterList.Count >= 5) throw new CharacterConflict();
             CharacterList.Add(character);
         }
-        public Character UpdateCharacter(Guid characterId, Position position, decimal health)
+
+        public Character UpdateCharacter(Guid characterId, Position position, Quaternion quaternion, 
+            decimal maxHealth, decimal health, decimal maxMana, decimal mana)
         {
             var character = CharacterList.FirstOrDefault(x => x.Id == characterId);
             if (character == null) throw new CharacterNotFound(characterId);
             character.Position = position;
+            character.Quaternion = quaternion;
+            character.MaxHealth = maxHealth;
             character.Health = health;
+            character.MaxMana = maxMana;
+            character.Mana = mana;
             return character;
         }
         public void DeleteCharacter(Guid characterId)

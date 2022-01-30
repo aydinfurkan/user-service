@@ -51,7 +51,8 @@ namespace UserService.Services
         public async Task<Character> ReplaceCharacter(Guid userId, ReplaceCharacterRequestModel requestModel)
         {
             var user = await GetUserById(userId);
-            var changedCharacter = user.UpdateCharacter(requestModel.CharacterId, requestModel.Position.ToModel(), requestModel.Health);
+            var changedCharacter = user.UpdateCharacter(requestModel.CharacterId, requestModel.Position.ToModel(), requestModel.Quaternion.ToModel(), 
+                requestModel.MaxHealth, requestModel.Health, requestModel.MaxMana, requestModel.Mana);
             await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
             return changedCharacter;
         }
