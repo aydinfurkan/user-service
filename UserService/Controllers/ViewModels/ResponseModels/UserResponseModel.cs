@@ -32,7 +32,16 @@ namespace UserService.Controllers.ViewModels.ResponseModels
                     Y = x.Position.Y, 
                     Z = x.Position.Z
                 },
-                Health = x.Health
+                Quaternion = new Quaternion()
+                {
+                    X = x.Position.X, 
+                    Y = x.Position.Y, 
+                    Z = x.Position.Z
+                },
+                MaxHealth = x.MaxHealth,
+                Health = x.Health,
+                MaxMana = x.MaxMana,
+                Mana = x.Mana,
             }).ToList();
         }
     }
