@@ -14,7 +14,7 @@ namespace UserService.Domains
         public string Class { get; set; }
         [BsonElement("position")] 
         public Position Position { get; set; }
-        [BsonElement("position")] 
+        [BsonElement("quaternion")] 
         public Quaternion Quaternion { get; set; }
         [BsonElement("maxHealth")] 
         public decimal MaxHealth { get; set; }
