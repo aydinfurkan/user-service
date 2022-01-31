@@ -34,9 +34,10 @@ namespace UserService.Controllers.ViewModels.ResponseModels
                 },
                 Quaternion = new Quaternion()
                 {
-                    X = x.Position.X, 
-                    Y = x.Position.Y, 
-                    Z = x.Position.Z
+                    X = x.Quaternion.X, 
+                    Y = x.Quaternion.Y, 
+                    Z = x.Quaternion.Z,
+                    W = x.Quaternion.W
                 },
                 MaxHealth = x.MaxHealth,
                 Health = x.Health,
