@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using UserService.Domains;
 
-namespace UserService.Helpers.Authorize
+namespace UserService.Helpers.Authorize.PToken
 {
     public interface IToken
     {

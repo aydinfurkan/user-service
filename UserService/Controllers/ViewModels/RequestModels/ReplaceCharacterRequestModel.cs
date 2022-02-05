@@ -1,6 +1,8 @@
 ﻿using System;
 using FluentValidation;
 using UserService.Controllers.ViewModels.Common;
+using Position = UserService.Controllers.ViewModels.Common.Position;
+using Quaternion = UserService.Controllers.ViewModels.Common.Quaternion;
 
 namespace UserService.Controllers.ViewModels.RequestModels
 {
@@ -9,10 +11,8 @@ namespace UserService.Controllers.ViewModels.RequestModels
         public Guid CharacterId { get; set; }
         public Position Position { get; set; }
         public Quaternion Quaternion { get; set; }
-        public decimal MaxHealth { get; set; }
-        public decimal Health { get; set; }
-        public decimal MaxMana { get; set; }
-        public decimal Mana { get; set; }
+        public Attributes Attributes { get; set; }
+        public decimal Experience { get; set; }
     }
     public class ReplaceCharacterRequestModelValidator : AbstractValidator<ReplaceCharacterRequestModel>
     {

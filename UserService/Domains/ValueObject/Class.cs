@@ -7,11 +7,10 @@ namespace UserService.Domains.ValueObject
         public static Class Mage = new ("mage");
         public static Class Warrior = new ("warrior");
         public static Class Archer = new ("archer");
-        public static Class Priest = new ("priest");
+        public static Class Healer = new ("healer");
 
-        public static List<Class> All = new (){Mage, Warrior, Archer, Priest};
-
-        public string Name { private set; get; }
+        public static List<Class> All = new (){Mage, Warrior, Archer, Healer};
+        public string Name { get; }
 
         private Class(string name)
         {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UserService.Helpers.Authorize
+namespace UserService.Helpers.Authorize.PToken
 {
     public class PTokenClaims
     {

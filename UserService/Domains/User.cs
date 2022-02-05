@@ -37,16 +37,14 @@ namespace UserService.Domains
         }
 
         public Character UpdateCharacter(Guid characterId, Position position, Quaternion quaternion, 
-            decimal maxHealth, decimal health, decimal maxMana, decimal mana)
+            Attributes attributes, decimal experience)
         {
             var character = CharacterList.FirstOrDefault(x => x.Id == characterId);
             if (character == null) throw new CharacterNotFound(characterId);
             character.Position = position;
             character.Quaternion = quaternion;
-            character.MaxHealth = maxHealth;
-            character.Health = health;
-            character.MaxMana = maxMana;
-            character.Mana = mana;
+            character.Attributes = attributes;
+            character.Experience = experience;
             return character;
         }
         public void DeleteCharacter(Guid characterId)

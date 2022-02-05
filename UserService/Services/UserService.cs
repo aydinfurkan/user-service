@@ -52,7 +52,7 @@ namespace UserService.Services
         {
             var user = await GetUserById(userId);
             var changedCharacter = user.UpdateCharacter(requestModel.CharacterId, requestModel.Position.ToModel(), requestModel.Quaternion.ToModel(), 
-                requestModel.MaxHealth, requestModel.Health, requestModel.MaxMana, requestModel.Mana);
+                requestModel.Attributes.ToModel(), requestModel.Experience);
             await _repository.UpdateUser(user, (x => x.CharacterList, user.CharacterList));
             return changedCharacter;
         }

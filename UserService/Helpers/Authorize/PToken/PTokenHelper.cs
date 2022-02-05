@@ -1,4 +1,4 @@
-﻿namespace UserService.Helpers.Authorize
+﻿namespace UserService.Helpers.Authorize.PToken
 {
     public static class PTokenHelper
     {

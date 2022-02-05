@@ -3,13 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using CoreLib.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using UserService.Configs;
 using UserService.Domains;
 using UserService.Exceptions;
 
-namespace UserService.Helpers.Authorize
+namespace UserService.Helpers.Authorize.PToken
 {
     public class JwtToken : IToken
     {

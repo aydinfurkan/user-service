@@ -14,6 +14,7 @@ namespace UserService.Controllers.ViewModels.RequestModels
         public CreateCharacterRequestModelValidator()
         {
             RuleFor(x => x.CharacterClass).Must(x => Class.All.Select(y => y.Name).Contains(x.ToLower())).WithMessage("Invalid character class.");
+            RuleFor(x => x.CharacterName).Length(3, 17).WithMessage("Invalid character name lenght.");
         }
     }
 }

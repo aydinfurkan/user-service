@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace UserService.Helpers.Authorize
+namespace UserService.Helpers.Authorize.Google
 {
     public class AuthResponse
     {

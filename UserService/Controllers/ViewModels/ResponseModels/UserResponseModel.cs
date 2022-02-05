@@ -39,10 +39,16 @@ namespace UserService.Controllers.ViewModels.ResponseModels
                     Z = x.Quaternion.Z,
                     W = x.Quaternion.W
                 },
-                MaxHealth = x.MaxHealth,
-                Health = x.Health,
-                MaxMana = x.MaxMana,
-                Mana = x.Mana,
+                Attributes = new Attributes()
+                {
+                    Strength = x.Attributes.Strength,
+                    Intelligent = x.Attributes.Intelligent,
+                    Dexterity = x.Attributes.Dexterity,
+                    Defense = x.Attributes.Defense,
+                    Vitality = x.Attributes.Vitality,
+                    Wisdom = x.Attributes.Wisdom
+                },
+                Experience = x.Experience
             }).ToList();
         }
     }

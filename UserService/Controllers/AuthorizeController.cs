@@ -8,6 +8,7 @@ using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
 using UserService.Helpers.Authorize;
+using UserService.Helpers.Authorize.PToken;
 using UserService.Helpers.Extensions;
 using UserService.Services;
 

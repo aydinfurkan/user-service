@@ -1,17 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
-using UserService.Helpers.Authorize;
+using UserService.Helpers.Authorize.PToken;
 using UserService.Services;
 
 namespace UserService.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize("Internal")]
     [Route("/user/internal")]
     public class InternalUserController : ControllerBase
     {
@@ -25,31 +27,30 @@ namespace UserService.Controllers
             _service = service;
             _token = token;
         }
-        
+
         /// <summary>
-        /// Get a single user by id
+        /// Replace a user character
         /// </summary>
-        /// <param name="id">Id of user</param>
-        /// <returns>A user with the given id.</returns>
-        /// <response code="200">Returns user with the given id.</response>
+        /// <param name="userId">Character id</param>
+        /// <param name="replaceCharacterRequestModel">Character to be replaced</param>
+        /// <returns>Replaced character id.</returns>
+        /// <response code="200">Returns character id.</response>
         /// <response code="400">The id is not valid.</response>
         /// <response code="404">User not found.</response>
         /// <response code="500">Internal server error.</response>
-        [HttpGet("verify")]
+        [HttpPut("character")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Verify()
+        public async Task<IActionResult> ReplaceCharacter([FromQuery] Guid userId,[FromBody] ReplaceCharacterRequestModel replaceCharacterRequestModel)
         {
-            var pTokenClaims = _token.GetClaims(HttpContext.User);
-
-            var user = await _service.GetUserByEmail(pTokenClaims.Email);
-            if (user == null)
-                throw new UserNotFound(pTokenClaims.UserId.ToString());
+            var character = await _service.ReplaceCharacter(userId, replaceCharacterRequestModel);
+            if (character == null)
+                throw new UserNotFound(userId.ToString());
             
-            return Ok(new UserResponseModel(user));
+            return Ok(new ReplaceCharacterResponseModel(character.Id, true));
         }
     }
 }

@@ -6,7 +6,9 @@ using CoreLib.Mongo.Context;
 using CoreLib.Swagger;
 using CoreLib.Validations;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +18,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using UserService.Configs;
-using UserService.Helpers.Authorize;
+using UserService.Helpers.Authorize.BasicAuth;
+using UserService.Helpers.Authorize.PToken;
 using UserService.Repositories;
 using UserService.Services;
 
@@ -27,6 +30,7 @@ namespace UserService
         public IConfiguration Configuration { get; }
         private readonly UserServiceSettings _mongoSettings;
         private readonly JwtTokenSettings _jwtTokenSettings;
+        private readonly InternalAuthSettings _internalAuthSettings;
         
         public Startup(IWebHostEnvironment env)
         {
@@ -39,6 +43,7 @@ namespace UserService
             Configuration = builder.Build();
             _mongoSettings = Configuration.GetSection("MongoSettings").Get<UserServiceSettings>();
             _jwtTokenSettings = Configuration.GetSection("JwtToken").Get<JwtTokenSettings>();
+            _internalAuthSettings = Configuration.GetSection("InternalAuthSettings").Get<InternalAuthSettings>();
             //_jwtSecretKey = Configuration["JwtToken:SecretKey"];
             //_googleSecretsSettings = Configuration.GetSection("Google:Secrets").Get<GoogleSecretSettings>();
         }
@@ -46,6 +51,8 @@ namespace UserService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_internalAuthSettings);
+            
             services.AddTValidation<Startup>();
             services.AddTransient(typeof(ILogger<>), typeof(Logger<>));
             services.AddTSwaggerGen("User Service", "User service for Piksel");
@@ -57,7 +64,7 @@ namespace UserService
             services.AddSingleton<IUserRepository, UserRepository>();
             
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)    
-                .AddJwtBearer(options =>    
+                .AddJwtBearer("PToken", options =>    
                 {    
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters    
@@ -69,18 +76,30 @@ namespace UserService
                         ValidIssuer = _jwtTokenSettings.Issuer,    
                         ValidAudience = _jwtTokenSettings.Audience,    
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtTokenSettings.SecretKey))    
-                    };    
+                    };
                 });
+            
+            services.AddAuthentication()
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuth", null);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("External", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes("PToken")
+                    .RequireAuthenticatedUser()
+                    .Build()); 
+                options.AddPolicy("Internal", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes("BasicAuth")
+                    .RequireAuthenticatedUser()
+                    .Build()); 
+            });
             
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-                        //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "http://www.pkhood.com");
                         builder
-                            //.WithOrigins("localhost","http://www.pkhood.com")
                             .SetIsOriginAllowed(origin => new Uri(origin).Host is "localhost" or "pkhood.com" or "www.pkhood.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod()

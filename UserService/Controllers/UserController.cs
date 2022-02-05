@@ -1,21 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
-using UserService.Helpers.Authorize;
+using UserService.Helpers.Authorize.PToken;
 using UserService.Services;
 
 namespace UserService.Controllers
 {
     [ApiController]
+    [Authorize("External")]
     [Route("/user")]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
@@ -30,7 +28,7 @@ namespace UserService.Controllers
         }
         
         /// <summary>
-        /// Get a single user by p_token in cookie
+        /// Get a single user by given PToken
         /// </summary>
         /// <returns>A user model.</returns>
         /// <response code="200">Returns user model.</response>
@@ -80,33 +78,6 @@ namespace UserService.Controllers
                 throw new UserNotFound(pTokenClaims.UserId.ToString());
             
             return Ok(new CreateCharacterResponseModel(character.Id, true));
-        }
-        
-        /// <summary>
-        /// Get a single user by id
-        /// </summary>
-        /// <param name="replaceCharacterRequestModel">Character to be created</param>
-        /// <returns>A user with the given id.</returns>
-        /// <response code="200">Returns user with the given id.</response>
-        /// <response code="400">The id is not valid.</response>
-        /// <response code="404">User not found.</response>
-        /// <response code="500">Internal server error.</response>
-        [HttpPut("character")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(UserResponseModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ReplaceCharacter([FromBody] ReplaceCharacterRequestModel replaceCharacterRequestModel)
-        {
-            //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
-            var pTokenClaims = _token.GetClaims(HttpContext.User);
-            
-            var character = await _service.ReplaceCharacter(pTokenClaims.UserId, replaceCharacterRequestModel);
-            if (character == null)
-                throw new UserNotFound(pTokenClaims.UserId.ToString());
-            
-            return Ok(new ReplaceCharacterResponseModel(character.Id, true));
         }
         
         /// <summary>
