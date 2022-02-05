@@ -2,10 +2,10 @@ namespace UserService.Controllers.ViewModels.Common
 {
     public class Quaternion
     {
-        public decimal X;
-        public decimal Y;
-        public decimal Z;
-        public decimal W;
+        public decimal X { get; set; }
+        public decimal Y { get; set; }
+        public decimal Z { get; set; }
+        public decimal W { get; set; }
 
         public Domains.ValueObject.Quaternion ToModel()
         {

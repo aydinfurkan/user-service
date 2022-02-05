@@ -5,13 +5,13 @@ namespace UserService.Domains.ValueObject
     public class Position
     {
         [BsonElement("x")] 
-        public decimal X;
+        public decimal X { get; set; }
 
         [BsonElement("y")] 
-        public decimal Y;
+        public decimal Y { get; set; }
 
         [BsonElement("z")] 
-        public decimal Z;
+        public decimal Z { get; set; }
 
         public Position(decimal x, decimal y, decimal z)
         {

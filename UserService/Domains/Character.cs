@@ -7,19 +7,19 @@ namespace UserService.Domains
     public class Character
     {
         [BsonElement("id")]
-        public Guid Id;
+        public Guid Id { get; set; }
         [BsonElement("name")] 
-        public string Name;
+        public string Name { get; set; }
         [BsonElement("class")] 
-        public string Class;
+        public string Class { get; set; }
         [BsonElement("position")]
-        public Position Position;
+        public Position Position { get; set; }
         [BsonElement("quaternion")] 
-        public Quaternion Quaternion;
+        public Quaternion Quaternion { get; set; }
         [BsonElement("attributes")] 
-        public Attributes Attributes;
+        public Attributes Attributes { get; set; }
         [BsonElement("experience")] 
-        public decimal Experience;
+        public decimal Experience { get; set; }
 
         public Character(string characterName, string characterClass)
         {

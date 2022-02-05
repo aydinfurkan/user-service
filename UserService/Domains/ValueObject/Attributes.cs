@@ -11,17 +11,17 @@ namespace UserService.Domains.ValueObject
         public static Attributes Healer = new (R(), R(), R(), R(), R(), R());
         
         [BsonElement("strength")] 
-        public int Strength;
+        public int Strength { get; set; }
         [BsonElement("vitality")] 
-        public int Vitality;
+        public int Vitality { get; }
         [BsonElement("dexterity")] 
-        public int Dexterity;
+        public int Dexterity { get; set; }
         [BsonElement("intelligent")] 
-        public int Intelligent;
+        public int Intelligent { get; set; }
         [BsonElement("wisdom")] 
-        public int Wisdom;
+        public int Wisdom { get; set; }
         [BsonElement("defense")] 
-        public int Defense;
+        public int Defense { get; set; }
 
         public Attributes(int strength, int vitality, int dexterity, int intelligent, int wisdom, int defense)
         {
