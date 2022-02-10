@@ -13,7 +13,7 @@ namespace UserService.Domains.ValueObject
         [BsonElement("strength")] 
         public int Strength { get; set; }
         [BsonElement("vitality")] 
-        public int Vitality { get; }
+        public int Vitality { get; set; }
         [BsonElement("dexterity")] 
         public int Dexterity { get; set; }
         [BsonElement("intelligent")] 
