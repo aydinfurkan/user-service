@@ -5,15 +5,15 @@ namespace UserService.Domains.ValueObject
     public class Quaternion
     {
         [BsonElement("x")] 
-        public decimal X { get; set; }
+        public double X { get; set; }
         [BsonElement("y")] 
-        public decimal Y { get; set; }
+        public double Y { get; set; }
         [BsonElement("z")] 
-        public decimal Z { get; set; }
+        public double Z { get; set; }
         [BsonElement("w")] 
-        public decimal W { get; set; }
+        public double W { get; set; }
 
-        public Quaternion(decimal x, decimal y, decimal z, decimal w)
+        public Quaternion(double x, double y, double z, double w)
         {
             X = x;
             Y = y;

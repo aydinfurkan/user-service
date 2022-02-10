@@ -37,7 +37,7 @@ namespace UserService.Domains
         }
 
         public Character UpdateCharacter(Guid characterId, Position position, Quaternion quaternion, 
-            Attributes attributes, decimal experience)
+            Attributes attributes, double experience)
         {
             var character = CharacterList.FirstOrDefault(x => x.Id == characterId);
             if (character == null) throw new CharacterNotFound(characterId);

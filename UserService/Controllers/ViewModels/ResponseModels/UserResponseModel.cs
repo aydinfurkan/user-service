@@ -23,7 +23,7 @@ namespace UserService.Controllers.ViewModels.ResponseModels
             Email = user.Email;
             CharacterList = user.CharacterList.Select(x => new Character
             {
-                Id = x.Id.ToString(),
+                Id = x.Id,
                 Name = x.Name,
                 Class = x.Class,
                 Position = new Position

@@ -19,7 +19,7 @@ namespace UserService.Domains
         [BsonElement("attributes")] 
         public Attributes Attributes { get; set; }
         [BsonElement("experience")] 
-        public decimal Experience { get; set; }
+        public double Experience { get; set; }
 
         public Character(string characterName, string characterClass)
         {
