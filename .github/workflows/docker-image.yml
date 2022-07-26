@@ -6,7 +6,7 @@ on:
 env:
   DOCKER_TAG: user-service
   DOCKER_PORT: 5000:5000
-  IMAGE_URL: ghcr.io/aydinfurkan/user-service:${{ github.run_number }}
+  IMAGE_URL: ghcr.io/aydinfurkan/user-service:latest
   CR_PAT: ${{ secrets.CR_PAT }}
   CI_REGISTRY: ghcr.io
 jobs:
