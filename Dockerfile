@@ -12,7 +12,7 @@ ARG NUGET_CR_PAT
 COPY . .
 COPY ./Nuget.Config.ci ./Nuget.Config
 RUN sed -i -e "s/NUGET_CR_PAT/$NUGET_CR_PAT/g" ./Nuget.Config
-RUN dotnet restore /UserService/UserService.csproj --configfile=./Nuget.Config
+RUN dotnet restore src/UserService/UserService.csproj --configfile=./Nuget.Config
 
 ## Set Secrets
 #ARG JWTTOKEN_SECRETKEY
