@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using UserService.Controllers.ViewModels.RequestModels;
 using UserService.Controllers.ViewModels.ResponseModels;
 using UserService.Exceptions;
-using UserService.Helpers.Authorize.PToken;
 using UserService.Services;
 
 namespace UserService.Controllers
@@ -19,13 +18,11 @@ namespace UserService.Controllers
     {
         private readonly ILogger<InternalUserController> _logger;
         private readonly IUserService _service;
-        private readonly IToken _token;
 
-        public InternalUserController(ILogger<InternalUserController> logger, IUserService service, IToken token)
+        public InternalUserController(ILogger<InternalUserController> logger, IUserService service)
         {
             _logger = logger;
             _service = service;
-            _token = token;
         }
 
         /// <summary>

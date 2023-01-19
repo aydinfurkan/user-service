@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using Newtonsoft.Json.Serialization;
 using UserService.Configs;
 using UserService.Helpers.Authorize.BasicAuth;
 using UserService.Helpers.Authorize.PToken;
@@ -108,7 +109,10 @@ namespace UserService
             });
             
             services.AddControllers();
-            services.AddMvc().AddFluentValidation();
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy= null;
+            }).AddFluentValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

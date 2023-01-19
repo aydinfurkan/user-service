@@ -29,7 +29,6 @@ namespace UserService.Helpers.Authorize.Google
             _googleSecretSettings = googleSecretSettings;
         }
         
-        
         public async Task<AuthResponse> ExchangeAuthorizationCode(string code, string redirectUri = null)
         {
             if (string.IsNullOrEmpty(redirectUri))
@@ -58,8 +57,7 @@ namespace UserService.Helpers.Authorize.Google
         {
             return $"client_id={_googleSecretSettings.ClientId}&client_secret={_googleSecretSettings.ClientSecret}&refresh_token={refreshToken}&grant_type=refresh_token";
         }
-
-
+        
         private async Task<AuthResponse> PostMessage(string postData)
         {
             var client = new HttpClient {BaseAddress = new Uri("https://oauth2.googleapis.com/")};
@@ -73,8 +71,5 @@ namespace UserService.Helpers.Authorize.Google
             var result = JsonSerializer.Deserialize<AuthResponse>(json);
             return result;
         }
-
-
-        
     }
 }
