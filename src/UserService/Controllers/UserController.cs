@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace UserService.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IUserService _service;
         private readonly IToken _token;
+        private readonly Guid _randomUserGenerateId = new Guid("f5a7b845-2a44-4c88-a89f-6a5ab5892015");
 
         public UserController(ILogger<UserController> logger, IUserService service, IToken token)
         {
@@ -45,6 +47,11 @@ namespace UserService.Controllers
         {
             //var pTokenClaims = _token.ParseToken(Request.Cookies[PTokenHelper.PTokenKey]);
             var pTokenClaims = _token.GetClaims(HttpContext.User);
+
+            if (pTokenClaims.UserId == _randomUserGenerateId)
+            {
+                return Ok(UserResponseModel.Random());
+            }
             
             var user = await _service.GetUserById(pTokenClaims.UserId);
             if (user == null)

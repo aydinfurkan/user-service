@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UserService.Controllers.ViewModels.Common;
+using RandomNameGenerator;
 using UserService.Domains;
+using UserService.Domains.ValueObject;
+using UserService.Helpers.Extensions;
+using Attributes = UserService.Controllers.ViewModels.Common.Attributes;
 using Character = UserService.Controllers.ViewModels.Common.Character;
+using Position = UserService.Controllers.ViewModels.Common.Position;
+using Quaternion = UserService.Controllers.ViewModels.Common.Quaternion;
 
 namespace UserService.Controllers.ViewModels.ResponseModels
 {
@@ -50,6 +55,21 @@ namespace UserService.Controllers.ViewModels.ResponseModels
                 },
                 Experience = x.Experience
             }).ToList();
+        }
+
+        public static UserResponseModel Random()
+        {
+            var name = NameGenerator.GenerateFirstName(Gender.Male);
+            var surname = NameGenerator.GenerateLastName();
+            var email = $"{name}@pkhood.com";
+            var user = new User(name, surname, email);
+            
+            foreach (var c in Class.All.Shuffle())
+            {
+                user.AddCharacter(new Domains.Character($"{name[0]}{name.Substring(1).ToLower()}.{c.Name}", c.Name));
+            }
+
+            return new UserResponseModel(user);
         }
     }
 }
