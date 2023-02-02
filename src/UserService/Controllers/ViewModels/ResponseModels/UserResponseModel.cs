@@ -68,7 +68,9 @@ namespace UserService.Controllers.ViewModels.ResponseModels
             {
                 user.AddCharacter(new Domains.Character($"{name[0]}{name.Substring(1).ToLower()}.{c.Name}", c.Name));
             }
-
+            
+            user.Id ??= Guid.NewGuid();
+            
             return new UserResponseModel(user);
         }
     }
